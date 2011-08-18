@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2011, Daniel Murphy
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  * 	* Redistributions of source code must retain the above copyright notice,
@@ -9,7 +9,7 @@
  * 	* Redistributions in binary form must reproduce the above copyright notice,
  * 	  this list of conditions and the following disclaimer in the documentation
  * 	  and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -32,16 +32,20 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.contacts.Contact;
+import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
+
+import android.util.Log;
 
 /**
  * @author Daniel Murphy
  */
 public class SphereStack extends TestbedTest {
-	
+
 	int e_count = 10;
 	Body m_bodies[] = new Body[e_count];
-	
+
 	/**
 	 * @see org.jbox2d.testbed.framework.TestbedTest#initTest(boolean)
 	 */
@@ -74,7 +78,7 @@ public class SphereStack extends TestbedTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * @see org.jbox2d.testbed.framework.TestbedTest#getTestName()
 	 */
@@ -82,5 +86,17 @@ public class SphereStack extends TestbedTest {
 	public String getTestName() {
 		return "Sphere Stack";
 	}
-	
+
+	@Override
+	public void beginContact(Contact contact) {
+		Log.d("contact", contact+"");
+		super.beginContact(contact);
+	}
+	@Override
+	public synchronized void step(TestbedSettings settings) {
+		super.step(settings);
+		for (Body b:m_bodies) {
+			b.applyForce(new Vec2(10,0), b.getPosition());
+		}
+	}
 }

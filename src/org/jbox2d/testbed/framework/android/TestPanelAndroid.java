@@ -21,7 +21,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
-package org.jbox2d.testbed.framework.j2d;
+package org.jbox2d.testbed.framework.android;
 
 
 import org.jbox2d.callbacks.DebugDraw;
@@ -46,8 +46,8 @@ import android.view.View;
  * @author Daniel Murphy
  */
 @SuppressWarnings("serial")
-public class TestPanelJ2D extends SurfaceView implements TestbedPanel {
-  private static final Logger log = LoggerFactory.getLogger(TestPanelJ2D.class);
+public class TestPanelAndroid extends SurfaceView implements TestbedPanel {
+  private static final Logger log = LoggerFactory.getLogger(TestPanelAndroid.class);
 
   public static final int INIT_WIDTH = 600;
   public static final int INIT_HEIGHT = 600;
@@ -62,12 +62,12 @@ public class TestPanelJ2D extends SurfaceView implements TestbedPanel {
   private int panelHeight;
 
   private final TestbedModel model;
-  private final DebugDrawJ2D draw;
+  private final DebugDrawAndroid draw;
 
-  public TestPanelJ2D(Context ctx,TestbedModel argModel) {
+  public TestPanelAndroid(Context ctx,TestbedModel argModel) {
 	  super(ctx);
     //setBackground(Color.black);
-    draw = new DebugDrawJ2D(this);
+    draw = new DebugDrawAndroid(this);
     model = argModel;
     updateSize(INIT_WIDTH, INIT_HEIGHT);
     //setPreferredSize(new Dimension(INIT_WIDTH, INIT_HEIGHT));

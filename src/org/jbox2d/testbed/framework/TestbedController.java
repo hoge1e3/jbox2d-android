@@ -25,7 +25,7 @@ package org.jbox2d.testbed.framework;
 
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.testbed.framework.j2d.TestPanelJ2D;
+import org.jbox2d.testbed.framework.android.TestPanelAndroid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +52,8 @@ public class TestbedController implements Runnable {
 
   private final TestbedModel model;
   private final TestbedPanel panel;
+
+  public static boolean active=true;
 
   public TestbedController(TestbedModel argModel, TestbedPanel argPanel) {
     model = argModel;
@@ -269,9 +271,11 @@ public class TestbedController implements Runnable {
         updateTime = System.nanoTime();
       }
 
-      panel.render();
-      update();
-      panel.paintScreen();
+      if (active) {
+    	  panel.render();
+    	  update();
+    	  panel.paintScreen();
+      }
       /*if (panel instanceof TestPanelJ2D) {
 		TestPanelJ2D panel2 = (TestPanelJ2D) panel;
 		panel2.releaseDBGraphics();

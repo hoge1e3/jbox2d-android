@@ -24,7 +24,7 @@
 /**
  * Created at 3:09:27 AM Jul 17, 2010
  */
-package org.jbox2d.testbed.framework.j2d;
+package org.jbox2d.testbed.framework.android;
 
 
 
@@ -51,16 +51,16 @@ import android.util.Log;
  *
  * @author Daniel Murphy
  */
-public class DebugDrawJ2D extends DebugDraw {
+public class DebugDrawAndroid extends DebugDraw {
   public static int circlePoints = 13;
 
-  private final TestPanelJ2D panel;
+  private final TestPanelAndroid panel;
   private final ColorPool cpool = new ColorPool();
 
   /**
    * @param viewport
    */
-  public DebugDrawJ2D(TestPanelJ2D argTestPanel) {
+  public DebugDrawAndroid(TestPanelAndroid argTestPanel) {
     super(new OBBViewportTransform());
     viewportTransform.setYFlip(true);
     panel = argTestPanel;
@@ -81,6 +81,7 @@ public class DebugDrawJ2D extends DebugDraw {
 	  Log.d("dd","DrawP");
 getWorldToScreenToOut(argPoint, sp1);
     Canvas g = getGraphics();
+    if (g==null) return;
 
     int c = cpool.getColor(argColor.x, argColor.y, argColor.z);
     Paint p = new Paint();
@@ -96,11 +97,13 @@ getWorldToScreenToOut(argPoint, sp1);
 
   @Override
   public void drawSegment(Vec2 p1, Vec2 p2, Color3f color) {
+    Canvas g = getGraphics();
+    if (g==null) return;
 	 // Log.d("dd","DrawSeg");
   getWorldToScreenToOut(p1, sp1);
     getWorldToScreenToOut(p2, sp2);
 
-    Canvas g = getGraphics();
+
     int c = cpool.getColor(color.x, color.y, color.z);
     Paint p = new Paint();
     p.setColor(c);
@@ -141,6 +144,8 @@ getWorldToScreenToOut(argPoint, sp1);
 
     // inside
     Canvas g = getGraphics();
+    if (g==null) return;
+
     //int[] xInts = xIntsPool.get(vertexCount);
     //int[] yInts = yIntsPool.get(vertexCount);
     float[] xyFloats = xyIntsPool.get(vertexCount*2);
@@ -167,6 +172,7 @@ getWorldToScreenToOut(argPoint, sp1);
   public void drawString(float x, float y, String s, Color3f color) {
 //	  Log.d("dd","DrawStr");
     Canvas g = getGraphics();
+    if (g==null) return;
 
     int c = cpool.getColor(color.x, color.y, color.z);
     Paint p = new Paint();
@@ -184,6 +190,8 @@ getWorldToScreenToOut(argPoint, sp1);
   public void drawTransform(Transform xf) {
 //	  Log.d("dd","DrawTr");
     Canvas g = getGraphics();
+    if (g==null) return;
+
     getWorldToScreenToOut(xf.position, temp);
     temp2.setZero();
     float k_axisScale = 0.4f;

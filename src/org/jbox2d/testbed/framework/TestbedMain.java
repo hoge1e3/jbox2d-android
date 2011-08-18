@@ -30,7 +30,7 @@ package org.jbox2d.testbed.framework;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.pooling.arrays.Vec2Array;
-import org.jbox2d.testbed.framework.j2d.TestPanelJ2D;
+import org.jbox2d.testbed.framework.android.TestPanelAndroid;
 import org.jbox2d.testbed.tests.DominoTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
