@@ -26,6 +26,10 @@
  */
 package org.jbox2d.testbed.tests;
 
+import java.util.Vector;
+
+import jp.tonyu.jbox2d.BodyBuilder;
+
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -44,7 +48,8 @@ import android.util.Log;
 public class SphereStack extends TestbedTest {
 
 	int e_count = 10;
-	Body m_bodies[] = new Body[e_count];
+	Vector<Body> m_bodies = new Vector<Body>();
+	CircleShape circle = new CircleShape();
 
 	/**
 	 * @see org.jbox2d.testbed.framework.TestbedTest#initTest(boolean)
@@ -52,31 +57,44 @@ public class SphereStack extends TestbedTest {
 	@Override
 	public void initTest(boolean argDeserialized) {
 		{
-			BodyDef bd = new BodyDef();
+			/*BodyDef bd = new BodyDef();
 			Body ground = getWorld().createBody(bd);
-
+*/
 			PolygonShape shape = new PolygonShape();
-			shape.setAsEdge(new Vec2(-40.0f, 0.0f), new Vec2(40.0f, 0.0f));
-			ground.createFixture(shape, 0.0f);
+			shape.setAsEdge(new Vec2(-40.0f, 0.0f), new Vec2(40.0f, -8.0f));
+			//ground.createFixture(shape, 0.0f);
+			builder().shape(shape).build();
 		}
 
 		{
-			CircleShape shape = new CircleShape();
-			shape.m_radius = 1.0f;
+			circle.m_radius = 1.0f;
 
 			for (int i = 0; i < e_count; ++i)
 			{
-				BodyDef bd = new BodyDef();
+				/*BodyDef bd = new BodyDef();
 				bd.type = BodyType.DYNAMIC;
 				bd.position.set(0.0f+i*0.1f, 4.0f + 3.0f * i);
 
-				m_bodies[i] = getWorld().createBody(bd);
+				Body b = getWorld().createBody(bd);
+				m_bodies.add (b);
 
-				m_bodies[i].createFixture(shape, 1.0f);
+				b.createFixture(circle, 1.0f);*/
+
+				m_bodies.add(builder()
+						.type(BodyType.DYNAMIC)
+						.pos(0.0+i*0.1, 4.0 + 3.0 * i)
+						.shape(circle)
+						.density(1.0)
+						.build()
+				);
 
 				//m_bodies[i].setLinearVelocity(new Vec2(0.0f, -100.0f));
 			}
 		}
+	}
+
+	private BodyBuilder builder() {
+		return new BodyBuilder(getWorld());
 	}
 
 	/**
@@ -84,7 +102,7 @@ public class SphereStack extends TestbedTest {
 	 */
 	@Override
 	public String getTestName() {
-		return "Sphere Stack";
+		return "Rolling Sphere";
 	}
 
 	@Override
@@ -95,8 +113,32 @@ public class SphereStack extends TestbedTest {
 	@Override
 	public synchronized void step(TestbedSettings settings) {
 		super.step(settings);
+		Vector<Body> willDestroy = new Vector<Body>();
 		for (Body b:m_bodies) {
-			b.applyForce(new Vec2(10,0), b.getPosition());
+			Vec2 pos = b.getPosition();
+			//b.applyForce(new Vec2(10,0), pos);
+			if (pos.x>10) {
+				getWorld().destroyBody(b);
+				willDestroy.add(b);
+			}
+		}
+		if (Math.random()<0.04) {
+			/*BodyDef bd = new BodyDef();
+			bd.type = BodyType.DYNAMIC;
+			bd.position.set(-20.0f+(float)Math.random()*40f, 10.0f);
+			Body b=getWorld().createBody(bd);
+			b.createFixture(circle, 1.0f);
+			m_bodies.add(b);*/
+			m_bodies.add(builder()
+					.type(BodyType.DYNAMIC)
+					.pos(-15.0f+(float)Math.random()*30f, 10.0f)
+					.shape(circle)
+					.density(1.0)
+					.build()
+			);
+		}
+		for (Body b:willDestroy) {
+			m_bodies.remove(b);
 		}
 	}
 }
